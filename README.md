@@ -1,0 +1,3 @@
+### learning ###
+
+some simple scripts to help me to understand... 
