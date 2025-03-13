@@ -1,0 +1,32 @@
+digraph {
+	root [label="Attribut: Outlook
+Samples: 14"]
+	root -> root_Sunny [label="Klasse: Sunny
+Entropie: 0.9710"]
+	root_Sunny [label="Attribut: Humidity
+Samples: 5"]
+	root_Sunny -> root_Sunny_High [label="Klasse: High
+Entropie: 0.0000"]
+	root_Sunny_High [label="Play: No
+Samples: 3"]
+	root_Sunny -> root_Sunny_Normal [label="Klasse: Normal
+Entropie: 0.0000"]
+	root_Sunny_Normal [label="Play: Yes
+Samples: 2"]
+	root -> root_Overcast [label="Klasse: Overcast
+Entropie: 0.0000"]
+	root_Overcast [label="Play: Yes
+Samples: 4"]
+	root -> root_Rain [label="Klasse: Rain
+Entropie: 0.9710"]
+	root_Rain [label="Attribut: Wind
+Samples: 5"]
+	root_Rain -> root_Rain_Weak [label="Klasse: Weak
+Entropie: 0.0000"]
+	root_Rain_Weak [label="Play: Yes
+Samples: 3"]
+	root_Rain -> root_Rain_Strong [label="Klasse: Strong
+Entropie: 0.0000"]
+	root_Rain_Strong [label="Play: No
+Samples: 2"]
+}
