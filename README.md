@@ -12,14 +12,23 @@ Akzeptiert als Quelle eine CSV oder Excel-Datei und zeigt
 den Ablauf der Berechnung eines ID3-Baums für diese Daten
 Erstellt ein PDF mit dem berechneten Baum.
 </pre>
+## NaiveBayes.py ##
+### Info ###
+<pre>
+Takes a CSV or XLSX as source, shows how to calculate the
+Likelihoods with Naive Bayes 
+Akzeptiert als Quelle eine CSV oder Excel-Datei und zeigt
+den Ablauf der Berechnung der Naive Bayes Wahrscheinlichkeit
+</pre>
 ### Installation ###
 <pre>
 python3 -m venv path/to/venv
 source path/to/venv/bin/activate
 pip install numpy pandas graphviz
 </pre>
-## Usage ##
+### Usage ###
 <pre>
 source path/to/venv/bin/activate
 python3 ID3.py
+python3 NaiveBayes.py
 </pre>
