@@ -12,6 +12,12 @@ Akzeptiert als Quelle eine CSV oder Excel-Datei und zeigt
 den Ablauf der Berechnung eines ID3-Baums für diese Daten
 Erstellt ein PDF mit dem berechneten Baum.
 </pre>
+## ID3_nxtree.py ##
+### Info ###
+<pre>
+Variante mit matplotlib und networkx, falls graphviz
+nicht verwendbar ist...
+</pre>
 ## NaiveBayes.py ##
 ### Info ###
 <pre>
