@@ -15,8 +15,8 @@ Erstellt ein PDF mit dem berechneten Baum.
 ## ID3_nxtree.py ##
 ### Info ###
 <pre>
-Variante mit matplotlib und networkx, falls graphviz
-nicht verwendbar ist...
+Variante (für Windows) mit matplotlib und networkx,
+falls graphviz nicht verwendbar ist...
 </pre>
 ## NaiveBayes.py ##
 ### Info ###
@@ -31,10 +31,10 @@ den Ablauf der Berechnung der Naive Bayes Wahrscheinlichkeit
 python3 -m venv path/to/venv
 source path/to/venv/bin/activate
 pip install numpy pandas matplotlib networkx graphviz
-python3 <scriptname.py>
+python3 ID3_nxtree.py
 </pre>
 ### Installation und Benutzung ohne venv ###
 <pre>
 pip install numpy pandas matplotlib networkx graphviz
-python3 <scriptname.py>
+python3 ID3_nxtree.py
 </pre>
