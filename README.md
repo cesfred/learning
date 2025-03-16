@@ -26,15 +26,15 @@ Likelihoods with Naive Bayes
 Akzeptiert als Quelle eine CSV oder Excel-Datei und zeigt
 den Ablauf der Berechnung der Naive Bayes Wahrscheinlichkeit
 </pre>
-### Installation ###
+### Installation und Benutzung mit venv ###
 <pre>
 python3 -m venv path/to/venv
 source path/to/venv/bin/activate
-pip install numpy pandas graphviz
+pip install numpy pandas matplotlib networkx graphviz
+python3 <scriptname.py>
 </pre>
-### Usage ###
+### Installation und Benutzung ohne venv ###
 <pre>
-source path/to/venv/bin/activate
-python3 ID3.py
-python3 NaiveBayes.py
+pip install numpy pandas matplotlib networkx graphviz
+python3 <scriptname.py>
 </pre>
