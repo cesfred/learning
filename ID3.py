@@ -4,14 +4,17 @@ import numpy as np
 import pandas as pd
 import graphviz
 
-def print_green(text):
-    """Gibt den übergebenen Text in grüner Farbe aus."""
+def print_green(*args, **kwargs):
     GREEN = "\033[92m"
     END = "\033[0m"
-    print(GREEN + text + END)
+    sep = kwargs.pop("sep", " ")
+    end = kwargs.pop("end", "\n")
+    file = kwargs.pop("file", sys.stdout)
+    message = sep.join(str(arg) for arg in args)
+    file.write(GREEN + message + END + end)
+    file.flush()
 
 def input_lightblue(prompt):
-    """Zeigt den Prompt in hellblauer Farbe an und wartet auf Eingabe."""
     LIGHTBLUE = "\033[94m"
     END = "\033[0m"
     return input(LIGHTBLUE + prompt + END)
@@ -47,7 +50,6 @@ def calculate_entropy_verbose(series, all_possible_values=None):
 
 def build_id3_tree(data, attributes, target_var, print_entropy=True):
     if print_entropy:
-        print_green("============================================================")
         current_entropy, entropy_details = calculate_entropy_verbose(
             data[target_var], sorted(data[target_var].unique())
         )
@@ -59,29 +61,29 @@ def build_id3_tree(data, attributes, target_var, print_entropy=True):
         current_entropy, _ = calculate_entropy_verbose(
             data[target_var], sorted(data[target_var].unique())
         )
-    
+
     # Blatt: wenn Knoten rein ist
     if abs(current_entropy) < 1e-6:
         majority = data[target_var].iloc[0]
         print("Knoten ist rein (Entropie 0). Eindeutiger Wert:", majority)
         input_lightblue("Enter zum Fortfahren...")
         return {"leaf": True, "class": majority, "num_samples": len(data)}
-    
+
     # Blatt: wenn keine Attribute mehr vorhanden sind
     if not attributes:
         majority = data[target_var].mode()[0]
         print("Keine Attribute mehr vorhanden. Knoten als Blatt mit Mehrheit:", majority)
         input_lightblue("Enter zum Fortfahren...")
         return {"leaf": True, "class": majority, "num_samples": len(data)}
-    
+
     total_samples = len(data)
     best_gain = -np.inf
     best_attribute = None
     best_branch_entropies = {}
-    
+
     # Berechne Informationsgewinn für jedes verbleibende Attribut:
     for attribute in attributes:
-        print("\nBerechne Gain für Attribut:", attribute)
+        print_green("\nID3 - Berechne Gewinn für Attribut:", attribute)
         attr_weighted_entropy = 0.0
         branch_entropies = {}
         weighted_values = []  # Sammlung der gewichteten Entropieanteile als Endwerte
@@ -102,29 +104,29 @@ def build_id3_tree(data, attributes, target_var, print_entropy=True):
             weighted_values.append(f"{weighted_component:.4f}")
         addition = " + ".join(weighted_values)
         gain = current_entropy - attr_weighted_entropy
-        print(f"\nGain für Attribut {attribute}: {current_entropy:.4f} - ({addition}) = {gain:.4f}")
+        print(f"\nGewinn für Attribut {attribute}: {current_entropy:.4f} - ({addition}) = {gain:.4f}")
         input_lightblue("Enter zum Fortfahren...")
         if gain > best_gain:
             best_gain = gain
             best_attribute = attribute
             best_branch_entropies = branch_entropies
-    print(f"\nBestes Attribut gewählt: {best_attribute} (Gain = {best_gain:.4f})")
+    print(f"\nBestes Attribut gewählt: {best_attribute} (Gewinn = {best_gain:.4f})")
     input_lightblue("Enter zum Fortfahren...")
-    
+
     # Für jeden Zweig des besten Attributs: Ausgabe der resultierenden Tabelle, Berechnung und Ausgabe der Entropie
     for value in data[best_attribute].unique():
         subset = data[data[best_attribute] == value]
-        print(f"\nResultierende Tabelle für {best_attribute} = {value}:")
+        print_green(f"\nResultierende Tabelle für {best_attribute} = {value}:\n")
         print(subset.to_string(index=False))
         branch_entropy_overall, branch_entropy_details = calculate_entropy_verbose(
             subset[target_var], sorted(data[target_var].unique())
         )
-        print("Berechnung der Entropie für diesen Teilbaum:")
+        print("\nBerechnung der Entropie für diesen Teilbaum:")
         print(branch_entropy_details[0])
         print(branch_entropy_details[1])
         print("Gesamtentropie für diesen Teilbaum: {:.4f}".format(branch_entropy_overall))
         input_lightblue("Enter zum Fortfahren...")
-    
+
     # Erstelle internen Knoten:
     node = {
         "leaf": False,
@@ -133,10 +135,10 @@ def build_id3_tree(data, attributes, target_var, print_entropy=True):
         "branch_info": best_branch_entropies,
         "branches": {}
     }
-    
+
     # Für jeden Zweig (Wert) des besten Attributs:
     for value in data[best_attribute].unique():
-        print(f"\nErstelle Unterbaum für {best_attribute} = {value}")
+        print_green(f"\nID3 - Erstelle Unterbaum für {best_attribute} = {value}\n")
         subset = data[data[best_attribute] == value]
         new_attributes = [a for a in attributes if a != best_attribute]
         subtree = build_id3_tree(subset, new_attributes, target_var, print_entropy=False)
@@ -168,13 +170,28 @@ def draw_tree(tree, dot, node_id, target_var):
 
 def main():
     try:
-        print_green("ID3 Baum Erstellung - Schritt 1: Eingabedatei laden")
-        filename = input("Bitte geben Sie den Pfad zur Eingabedatei ein (CSV oder Excel): ").strip()
+        print_green("ID3 - Eingabedatei laden")
+        while True:
+            filename = input("Bitte Quell-Datei angeben (CSV oder Excel): ").strip()
+
+            # Prüfe, ob die Datei existiert
+            if not os.path.exists(filename):
+                print("Fehler: Datei nicht gefunden.\n")
+                continue
+
+            # Prüfe, ob die Datei lesbar ist
+            if not os.access(filename, os.R_OK):
+                print("Fehler: Datei nicht lesbar.\n")
+                continue
+
+            # Wenn Datei existiert und lesbar ist, Schleife verlassen
+            break
+
         _, ext = os.path.splitext(filename)
         ext = ext.lower()
-        
+
         if ext == ".csv":
-            sep = input("CSV-Datei erkannt. Bitte geben Sie den Separator ein (z. B. ',', ';', '|'): ").strip()
+            sep = input("CSV-Datei erkannt. Bitte Separator angeben (z. B. ',', ';', '|'): ").strip()
             print(f"Lade CSV-Datei mit Separator '{sep}' ...")
             df = pd.read_csv(filename, sep=sep)
         elif ext in [".xls", ".xlsx"]:
@@ -184,33 +201,36 @@ def main():
             print("Nicht unterstütztes Dateiformat!")
             return
         print("Datei wurde erfolgreich geladen!")
-    
-        print_green("\nID3 Baum Erstellung - Schritt 2: Zielvariable auswählen")
-        print("Gefundene Variablen:")
-        for idx, col in enumerate(df.columns):
-            print(f"  {idx}: {col}")
-        try:
-            target_index = int(input("Bitte geben Sie den Index der Zielvariable ein: "))
-            target_var = df.columns[target_index]
-        except (IndexError, ValueError) as e:
-            print("Ungültige Eingabe für die Zielvariable:", e)
-            return
+
+
+        print_green("\nID3 - Zielvariable auswählen")
+        while True:
+            print("Gefundene Variablen:")
+            for idx, col in enumerate(df.columns):
+                print(f"  {idx}: {col}")
+            try:
+                target_index = int(input("Bitte Zielvariable auswählen: "))
+                target_var = df.columns[target_index]
+                break  # gültige Eingabe
+            except (IndexError, ValueError) as e:
+                print("Ungültige Zielvariable:", e)
         print(f"Zielvariable ausgewählt: '{target_var}'")
-        
-        print_green(f"\nID3 Baum Erstellung - Schritt 3: Berechnung der Entropie für '{target_var}' (Enter...)")
+
+        print_green(f"\nID3 - Berechnung der Entropie für '{target_var}'")
         input_lightblue("Enter zum Fortfahren...")
         # Hier erfolgt die Entropieberechnung NICHT in main, da sie in build_id3_tree ausgegeben wird.
-    
+
         # Baum rekursiv aufbauen
         attributes = [col for col in df.columns if col != target_var]
         tree = build_id3_tree(df, attributes, target_var)
-        
+
         # Baum zeichnen
+        print_green("\nID3 - Zeichne Baum...\n")
         dot = graphviz.Digraph()
         draw_tree(tree, dot, "root", target_var)
         dot.render("final_id3_tree", view=True)
     except KeyboardInterrupt:
-        print("\nProgramm wurde durch STRG+C beendet.")
+        print("\nProgramm abgebrochen.")
         sys.exit(0)
 
 if __name__ == "__main__":

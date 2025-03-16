@@ -6,6 +6,8 @@ einige einfache Skripte um Algorithmen zu verstehen...
 ## ID3.py ##
 ### Info ###
 <pre>
+Takes a CSV or XLSX as source, shows how to calculate the
+ID3 tree and print it out as PDF.
 Akzeptiert als Quelle eine CSV oder Excel-Datei und zeigt
 den Ablauf der Berechnung eines ID3-Baums für diese Daten
 Erstellt ein PDF mit dem berechneten Baum.
