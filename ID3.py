@@ -228,7 +228,9 @@ def main():
         print_green("\nID3 - Zeichne Baum...\n")
         dot = graphviz.Digraph()
         draw_tree(tree, dot, "root", target_var)
-        dot.render("final_id3_tree", view=True)
+        dot.format = "png"
+        dot.attr(dpi='300')
+        dot.render("ID3_Baum", view=True)
     except KeyboardInterrupt:
         print("\nProgramm abgebrochen.")
         sys.exit(0)
