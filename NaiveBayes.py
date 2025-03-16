@@ -115,7 +115,7 @@ def compute_likelihoods_and_posteriors(df, target_var, sample):
         likelihood *= (total_cls / total_samples)
         details[cls] = cls_details
         detail_str = " * ".join(cls_details)
-        print(f"Likelihood({cls}) = {detail_str} = {likelihood:.4f}")
+        print(f"Likelihood: {target_var}({cls}) = {detail_str} = {likelihood:.4f}")
         likelihoods[cls] = likelihood
     return likelihoods, details
 
@@ -157,7 +157,7 @@ def compute_likelihoods_and_posteriors_laplace(df, target_var, sample, smoothing
         likelihood *= prior
         likelihoods[cls] = likelihood
         detail_str = " * ".join(cls_details)
-        print(f"Likelihood({cls}) mit LaPlace: {detail_str} = {likelihood:.4f}")
+        print(f"Likelihood: {target_var}({cls}) mit LaPlace: {detail_str} = {likelihood:.4f}")
     return likelihoods, details
 
 def compute_normalized_posteriors(likelihoods, target_var):
@@ -170,9 +170,9 @@ def compute_normalized_posteriors(likelihoods, target_var):
         normalized[cls] = norm
     for cls in sorted(likelihoods.keys()):
         if total == 0:
-            print(f"Wahrscheinlichkeit({cls}) = 0 (keine Wahrscheinlichkeit berechenbar)")
+            print(f"Wahrscheinlichkeit: {target_var}({cls}) = 0 (keine Wahrscheinlichkeit berechenbar)")
         else:
-            print(f"Wahrscheinlichkeit({target_var}({cls})) = {likelihoods[cls]:.4f} / ({parts}) = {normalized[cls]:.2f} entspricht {normalized[cls]*100:.0f}%")
+            print(f"Wahrscheinlichkeit: {target_var}({cls}) = {likelihoods[cls]:.4f} / ({parts}) = {normalized[cls]:.2f} entspricht {normalized[cls]*100:.0f}%")
     return normalized
 
 def main():
