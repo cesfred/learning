@@ -217,10 +217,8 @@ def draw_tree(tree, target_var):
     edge_labels = nx.get_edge_attributes(G, 'label')
 
     plt.figure(figsize=(12, 8))
-    # Knoten um ca. 20% größer: von 2000 auf 2400
-    nx.draw(G, pos, with_labels=True, labels=node_labels, node_size=2400, node_color='lightblue', font_size=8)
-    # Setze rotate=False, damit die Kantenbeschriftungen horizontal angezeigt werden
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red', font_size=8, rotate=False)
+    nx.draw(G, pos, with_labels=True, labels=node_labels, node_size=5000, node_color='lightblue', font_size=10)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='black', font_size=10, rotate=True)
     plt.axis('off')
     plt.show()
 
