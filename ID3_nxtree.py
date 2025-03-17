@@ -270,7 +270,7 @@ def main():
         while True:
             # Prüfen, ob genügend Spalten vorhanden sind
             if len(df.columns) <= 1:
-                print_red("Nicht genügend Elemente gefunden, bitte Quelldatei überprüfen")
+                print_red("Nicht genügend Elemente gefunden, bitte Quelldatei oder Separator überprüfen")
                 sys.exit(1)
 
             print("Gefundene Variablen:")

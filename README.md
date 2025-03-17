@@ -31,6 +31,13 @@ Akzeptiert als Quelle eine CSV oder Excel-Datei und zeigt
 den Ablauf der Berechnung eines ID3-Baums für diese Daten
 Erstellt ein PDF mit dem berechneten Baum.
 </pre>
+## Graphviz ##
+<pre>
+Um graphviz unter Windows nutzen zu können müssen die Binaries
+von https://graphviz.org/download installiert oder abgelegt werden
+und der "PATH" in den Umgebungsvariablen angepasst werden, z.B.
+"C:\Program Files\Graphviz\bin" angefügt werden.
+</pre>
 ### ID3_nxtree.py ###
 <pre>
 Variante (für Windows) mit matplotlib und networkx,
