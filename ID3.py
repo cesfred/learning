@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import pandas as pd
 import graphviz
+from graphviz.backend.execute import ExecutableNotFound
 
 def print_green(*args, **kwargs):
     GREEN = "\033[92m"
@@ -12,6 +13,16 @@ def print_green(*args, **kwargs):
     file = kwargs.pop("file", sys.stdout)
     message = sep.join(str(arg) for arg in args)
     file.write(GREEN + message + END + end)
+    file.flush()
+
+def print_red(*args, **kwargs):
+    RED = "\033[91m"
+    END = "\033[0m"
+    sep = kwargs.pop("sep", " ")
+    end = kwargs.pop("end", "\n")
+    file = kwargs.pop("file", sys.stdout)
+    message = sep.join(str(arg) for arg in args)
+    file.write(RED + message + END + end)
     file.flush()
 
 def input_lightblue(prompt):
@@ -168,6 +179,14 @@ def draw_tree(tree, dot, node_id, target_var):
             dot.edge(node_id, child_id, label=edge_label)
             draw_tree(subtree, dot, child_id, target_var)
 
+def render_graph(dot):
+    try:
+        dot.render(filename='ID3_Baum', view=True)
+    except ExecutableNotFound:
+        print_red("\nGraphviz binary nicht gefunden!")
+        print_red("Bitte Graphviz installieren - siehe: https://graphviz.org/download")
+        print_red("Oder alternativ die nxtree Variante verwenden.")
+
 def main():
     try:
         print_green("ID3 - Eingabedatei laden")
@@ -176,12 +195,12 @@ def main():
 
             # Prüfe, ob die Datei existiert
             if not os.path.exists(filename):
-                print("Fehler: Datei nicht gefunden.\n")
+                print_red("Fehler: Datei nicht gefunden.\n")
                 continue
 
             # Prüfe, ob die Datei lesbar ist
             if not os.access(filename, os.R_OK):
-                print("Fehler: Datei nicht lesbar.\n")
+                print_red("Fehler: Datei nicht lesbar.\n")
                 continue
 
             # Wenn Datei existiert und lesbar ist, Schleife verlassen
@@ -198,22 +217,26 @@ def main():
             print("Excel-Datei erkannt. Lade Excel-Datei ...")
             df = pd.read_excel(filename)
         else:
-            print("Nicht unterstütztes Dateiformat!")
+            print_red("Nicht unterstütztes Dateiformat!")
             return
         print("Datei wurde erfolgreich geladen!")
 
-
         print_green("\nID3 - Zielvariable auswählen")
         while True:
+            # Prüfen, ob genügend Spalten vorhanden sind
+            if len(df.columns) <= 1:
+                print_red("Nicht genügend Elemente gefunden, bitte Quelldatei überprüfen")
+                sys.exit(1)
+
             print("Gefundene Variablen:")
             for idx, col in enumerate(df.columns):
                 print(f"  {idx}: {col}")
             try:
                 target_index = int(input("Bitte Zielvariable auswählen: "))
                 target_var = df.columns[target_index]
-                break  # gültige Eingabe
+                break  # Gültige Eingabe
             except (IndexError, ValueError) as e:
-                print("Ungültige Zielvariable:", e)
+                print_red("Ungültige Zielvariable:")
         print(f"Zielvariable ausgewählt: '{target_var}'")
 
         print_green(f"\nID3 - Berechnung der Entropie für '{target_var}'")
@@ -230,9 +253,11 @@ def main():
         draw_tree(tree, dot, "root", target_var)
         dot.format = "png"
         dot.attr(dpi='300')
-        dot.render("ID3_Baum", view=True)
+        #dot.render("ID3_Baum", view=True)
+        render_graph(dot)
+
     except KeyboardInterrupt:
-        print("\nProgramm abgebrochen.")
+        print_red("\nProgramm abgebrochen.")
         sys.exit(0)
 
 if __name__ == "__main__":

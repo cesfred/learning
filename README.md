@@ -3,7 +3,6 @@
 some simple scripts to help me to understand algorithms...
 einige einfache Skripte um Algorithmen zu verstehen...
 </pre>
-
 ## Installation und Benutzung mit venv (Linux/Mac) ##
 <pre>
 python3 -m venv path/to/venv
@@ -24,7 +23,6 @@ python3 ID3.py
 python3 -m pip install networkx>3 matplotlib>3 numpy>2 pandas>2 openpyxl>3 graphviz
 python3 ID3.py
 </pre>
-
 ### ID3.py ###
 <pre>
 Takes a CSV or XLSX as source, shows how to calculate the
@@ -45,4 +43,3 @@ Likelihoods with Naive Bayes
 Akzeptiert als Quelle eine CSV oder Excel-Datei und zeigt
 den Ablauf der Berechnung der Naive Bayes Wahrscheinlichkeit
 </pre>
-
