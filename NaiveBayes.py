@@ -12,6 +12,16 @@ def print_green(*args, **kwargs):
     sys.stdout.write(GREEN + message + END + end)
     sys.stdout.flush()
 
+def print_red(*args, **kwargs):
+    RED = "\033[91m"
+    END = "\033[0m"
+    sep = kwargs.pop("sep", " ")
+    end = kwargs.pop("end", "\n")
+    file = kwargs.pop("file", sys.stdout)
+    message = sep.join(str(arg) for arg in args)
+    file.write(RED + message + END + end)
+    file.flush()
+
 def input_lightblue(prompt):
     LIGHTBLUE = "\033[94m"
     END = "\033[0m"
@@ -22,16 +32,20 @@ def select_file():
         print_green("Naive Bayes - Eingabedatei laden\n")
         filename = input("Bitte Quell-Datei angeben (CSV oder Excel): ").strip()
         if not os.path.exists(filename):
-            print("Fehler: Datei nicht gefunden.\n")
+            print_red("Fehler: Datei nicht gefunden.\n")
             continue
         if not os.access(filename, os.R_OK):
-            print("Fehler: Datei nicht lesbar.\n")
+            print_red("Fehler: Datei nicht lesbar.\n")
             continue
         return filename
 
 def select_target_variable(df):
     print_green("\nNaive Bayes - Zielvariable auswählen\n")
     while True:
+        # Prüfen, ob genügend Spalten vorhanden sind
+        if len(df.columns) <= 1:
+            print_red("Nicht genügend Elemente gefunden, bitte Quelldatei überprüfen")
+            sys.exit(1)
         print("Gefundene Variablen:")
         for idx, col in enumerate(df.columns):
             print(f"  {idx}: {col}")
@@ -40,8 +54,7 @@ def select_target_variable(df):
             target_var = df.columns[target_index]
             return target_var
         except (IndexError, ValueError) as e:
-            print("Ungültige Eingabe für die Zielvariable:", e)
-            print("Bitte erneut versuchen.\n")
+            print_red("Ungültige Eingabe für die Zielvariable:")
 
 def print_relative_frequencies(df, target_var):
     """
@@ -88,7 +101,7 @@ def select_new_sample(df, target_var):
                 sample[attribute] = unique_values[idx_val]
                 break
             except (IndexError, ValueError) as e:
-                print("Ungültige Eingabe...")
+                print_red("Ungültige Eingabe...")
     return sample
 
 def compute_likelihoods_and_posteriors(df, target_var, sample):
@@ -189,7 +202,7 @@ def main():
             print("Excel-Datei erkannt. Lade Excel-Datei ...")
             df = pd.read_excel(filename)
         else:
-            print("Nicht unterstütztes Dateiformat!")
+            print_red("Nicht unterstütztes Dateiformat!")
             return
         print("Datei wurde erfolgreich geladen!")
 
@@ -226,7 +239,7 @@ def main():
             print("\n")
 
     except KeyboardInterrupt:
-        print("\nProgramm abgebrochen.")
+        print_red("\nProgramm abgebrochen.")
         sys.exit(0)
 
 if __name__ == "__main__":
