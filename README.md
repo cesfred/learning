@@ -2,6 +2,8 @@
 <pre>
 some simple scripts to help me to understand algorithms...
 einige einfache Skripte um Algorithmen zu verstehen...
+hier auch als flask app zum testen verfügbar:
+https://dm.dhn.network/
 </pre>
 ## Installation und Benutzung mit venv (Linux/Mac) ##
 <pre>
