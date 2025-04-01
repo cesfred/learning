@@ -255,12 +255,21 @@ def main():
         ext = ext.lower()
 
         if ext == ".csv":
-            sep = input("CSV-Datei erkannt. Bitte Separator angeben (z. B. ',', ';', '|'): ").strip()
-            print(f"Lade CSV-Datei mit Separator '{sep}' ...")
-            df = pd.read_csv(filename, sep=sep)
+            print(f"CSV-Datei erkannt. Lade CSV-Datei...")
+            df = pd.read_csv(filename, sep=None, engine='python')
+            # trim columns
+            df.columns = df.columns.str.strip()
+            # trim values
+            for col in df.select_dtypes(include=['object']).columns:
+                df[col] = df[col].str.strip()
         elif ext in [".xls", ".xlsx"]:
-            print("Excel-Datei erkannt. Lade Excel-Datei ...")
+            print("Excel-Datei erkannt. Lade Excel-Datei...")
             df = pd.read_excel(filename)
+            # trim columns
+            df.columns = df.columns.str.strip()
+            # trim values
+            for col in df.select_dtypes(include=['object']).columns:
+                df[col] = df[col].str.strip()
         else:
             print_red("Nicht unterstütztes Dateiformat!")
             return
