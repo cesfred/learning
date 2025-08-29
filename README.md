@@ -1,7 +1,7 @@
 # Learn Datamining
 
 Einige einfache Skripte, um Datamining Algorithmen besser zu verstehen.  
-Hier auch als Flask-App zum Testen verfügbar:  
+Hier auch als Flask-App zum Testen verfügbar (ID3, NaivBayes, kNN):  
 👉 [https://dm.dhn.network/](https://dm.dhn.network/)
 
 ---
@@ -33,8 +33,8 @@ python3 ID3.py
 
 ### `ID3.py`
 
+- Zeigt Schritt für Schriit den Ablauf der Berechnung eines **ID3-Entscheidungsbaums**.
 - Akzeptiert eine CSV- oder Excel-Datei als Datenquelle.
-- Zeigt den Ablauf der Berechnung eines **ID3-Entscheidungsbaums**.
 - Erstellt eine PDF-Datei mit dem berechneten Baum.
 - Nutzt Graphviz zur Visualisierung.
 
@@ -45,8 +45,8 @@ python3 ID3.py
 
 ### `NaiveBayes.py`
 
-- Akzeptiert eine CSV- oder Excel-Datei als Datenquelle.
 - Zeigt die Berechnung der **Naive-Bayes-Wahrscheinlichkeiten** Schritt für Schritt.
+- Akzeptiert eine CSV- oder Excel-Datei als Datenquelle.
 
 ---
 
